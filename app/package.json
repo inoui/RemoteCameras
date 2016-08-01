@@ -1,9 +1,9 @@
 {
-  "name": "nw-boilerplate",
-  "productName": "NW Boilerplate",
-  "description": "Starter for NW.js application. Out of the box ready for serious stuff.",
+  "name": "remote-cameras",
+  "productName": "Remote Cameras",
+  "description": "Remote Cameras.",
   "version": "0.1.0",
-  "author": "Mr Gumby <gumby@sillywalks.com>",
+  "author": "T Goetz <tom@inoui.io>",
   "main": "app.html",
   "window": {
     "icon": "icon.png",
