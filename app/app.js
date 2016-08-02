@@ -4,7 +4,10 @@
 // -----------------------------------------------------
 
 // Browser modules are imported through new ES6 syntax.
-import { greet } from './hello_world/hello_world';
+import { Cameras } from './cameras/index';
+var cams = new Cameras();
+
+cams.takePictures();
 
 // Node modules are required the same way as always.
 var os = require('os');
@@ -12,6 +15,6 @@ var os = require('os');
 // window.env contains data from config/env_XXX.json file.
 var envName = window.env.name;
 
-document.getElementById('greet').innerHTML = greet();
-document.getElementById('platform-info').innerHTML = os.platform();
-document.getElementById('env-name').innerHTML = envName;
+// document.getElementById('greet').innerHTML = greet();
+// document.getElementById('platform-info').innerHTML = os.platform();
+// document.getElementById('env-name').innerHTML = envName;
