@@ -5,9 +5,18 @@
 
 // Browser modules are imported through new ES6 syntax.
 import { Cameras } from './cameras/index';
-var cams = new Cameras();
+import { Controller } from './controller/controller';
 
-cams.takePictures();
+// var cams = new Cameras;
+// cams.init(function(){
+// 	cams.takePictures();
+// });
+
+// var control = new Controller();
+// console.log("1");
+// control.init();
+// console.log("2");
+
 
 // Node modules are required the same way as always.
 var os = require('os');
