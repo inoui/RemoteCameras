@@ -16,6 +16,7 @@
     "position": "center"
   },
   "dependencies": {
+    "fs": "0.0.2",
     "fs-jetpack": "^0.6.4",
     "johnny-five": "^0.9.61",
     "moment": "^2.14.1"

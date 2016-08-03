@@ -1,15 +1,13 @@
 var exec = require('child_process').exec;
 var moment = require("moment");
 var listPorts = [];
-var essai ="je suis un string";
+var __dirname = process.env.PWD;
+
 export class Cameras {
 
-    init(afunction) {
-        console.log(essai);
+    init(callback) {
 	    exec("gphoto2 --auto-detect", function(error, stdout, stderr) {
-            console.log("je suis ici");
 	        console.log(stdout);
-            console.log(essai);
 	        for (var i = 0; i < stdout.length; i++) {
 	            if ((stdout[i]=='u')&&(stdout[i+1]=='s')&& (stdout[i+2]=='b')){
 	                var nameport = '';
@@ -21,54 +19,30 @@ export class Cameras {
 	                listPorts.push(nameport);
 	            };
 	        };
-            afunction();
+            callback();
     	});
     }
 
-	takePictures() {
-        console.log("làlàlàlàlà");
-		var date = moment().format();
-		//console.log(listPorts);
+	takePictures(callback) {
+		var date = moment().format("DD:MM:YYYY-HH-mm-ss");
+        var listPictures = [];
+        var listPromesses = [];
 	    for (var i = 0; i < listPorts.length; i++) {
-	        exec("gphoto2 --port usb:"+listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ date +"/picture"+i+".jpg ", function (error, stdout, stderr) {
-	           console.log(error);
-               console.log(stdout);
-               console.log(stderr);
+            var path = __dirname+"/pictures/"+ date +"/picture"+i+".jpg ";
+            console.log(path);
+            listPictures.push(path);
+	        var promesse = new Promise((resolve, reject) => {
+                exec("gphoto2 --port usb:"+listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , function (error, stdout, stderr) {
+    	           resolve();
+                   console.log(error);
+                   console.log(stdout);
+                   console.log(stderr);
+                });
             });
+            listPromesses.push(promesse)
 	    };
+        Promise.all(listPromesses).then((values) => {
+            callback(listPictures); 
+        });
 	}
-
-}
-
-function getDate() {
-        date = new Date;
-        a  = date.getFullYear();
-        mois = date.getMonth() + 1;
-        if(mois<10)
-        {
-                mois = "0"+mois;
-        }
-        j = date.getDate();
-        if(j<10)
-        {
-                j = "0"+j;
-        }
-
-        h = date.getHours()+2;
-        if(h<10)
-        {
-                h = "0"+h;
-        }
-        m = date.getMinutes();
-        if(m<10)
-        {
-                m = "0"+m;
-        }
-        s = date.getSeconds();
-        if(s<10)
-        {
-                s = "0"+s;
-        }
-        resultat = j+'.'+mois+'.'+a+'-'+h+'.'+m+'.'+s;
-        return resultat;
 }
