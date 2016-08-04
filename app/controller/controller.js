@@ -1,10 +1,11 @@
+nw.require("nwjs-j5-fix").fix();
 var five = require("johnny-five"),
     board,
     button,
     led;
 
 export class Controller {
-    init() {
+    constructor() {
     	board = new five.Board();
 	    board.on("ready", function() {
 		    // button = new five.Button(2);

@@ -29,7 +29,7 @@ document.addEventListener('keydown', (event) => {
 }, false);
 
 
-// var control = new Controller();
+var control = new Controller();
 // console.log("1");
 // control.init();
 // console.log("2");
