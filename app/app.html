@@ -7,7 +7,6 @@
     <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
 
     <!-- Scripts giving you few extra things in NW.js -->
-    <script src="vendor/nw-boilerplate/window_state.js"></script>
     <script src="vendor/nw-boilerplate/context_menu.js"></script>
     <script src="vendor/nw-boilerplate/external_links.js"></script>
     <script src="vendor/nw-boilerplate/dev_helper.js"></script>
@@ -23,6 +22,7 @@
                 mb.createMacBuiltin(gui.App.manifest.productName);
                 win.menu = mb;
             }
+
         }());
     </script>
 
@@ -34,9 +34,28 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="container">
         <p id="cam_status"></p>
     </div>
+
+
+
+
+    <script type="text/template" id="imageList">
+        <ul class="listImages">
+            <% _.each(images,function(img) { %>
+               <li>
+                    <img src="file://<%= img.src %>" alt="">
+                    <span><%= img.name %></span>
+                </li>
+            <% }); %>
+        </ul>
+
+        <input type="text" name="images-name" placeholder="images name" id="newname"><br>
+        <input type="button" value="rename" id="rename"> <br><br>
+        <input type="button" value="open folder" id="openFolder"><br><br>
+        <input type="button" value="New images" id="newImage"><br><br>
+    </script>
 
 </body>
 </html>

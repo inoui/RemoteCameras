@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "T Goetz <tom@inoui.io>",
   "main": "app.html",
+  "chromium-args": "--mixed-context",
   "window": {
     "icon": "icon.png",
     "show": true,
@@ -19,6 +20,8 @@
     "fs": "0.0.2",
     "fs-jetpack": "^0.6.4",
     "johnny-five": "^0.9.61",
-    "moment": "^2.14.1"
+    "jquery": "^3.1.0",
+    "moment": "^2.14.1",
+    "underscore": "^1.8.3"
   }
 }

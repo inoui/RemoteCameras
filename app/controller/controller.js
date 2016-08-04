@@ -1,6 +1,8 @@
 var five = require("johnny-five"),
-board,button;
-var led;
+    board,
+    button,
+    led;
+
 export class Controller {
     init() {
     	board = new five.Board();
@@ -11,7 +13,6 @@ export class Controller {
 		    // });
 			led = new five.Led(13);
 			led.blink(500);
-  			
 	    });
 	    console.log("ready!");
 	   //      button.on("up", function() {

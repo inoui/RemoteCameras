@@ -8,6 +8,7 @@ import { Cameras } from './cameras/index';
 import { Controller } from './controller/controller';
 import { listPicture } from './picture/listPicture';
 
+
 var __dirname = process.env.PWD;
 
 var cams = new Cameras;
@@ -26,6 +27,7 @@ document.addEventListener('keydown', (event) => {
 		});
   }
 }, false);
+
 
 // var control = new Controller();
 // console.log("1");

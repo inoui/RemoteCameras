@@ -24,25 +24,22 @@ export class Cameras {
     }
 
 	takePictures(callback) {
-		var date = moment().format("DD:MM:YYYY-HH-mm-ss");
+		var date = moment().unix();
         var listPictures = [];
         var listPromesses = [];
 	    for (var i = 0; i < listPorts.length; i++) {
-            var path = __dirname+"/pictures/"+ date +"/picture"+i+".jpg ";
+            var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
             console.log(path);
             listPictures.push(path);
 	        var promesse = new Promise((resolve, reject) => {
                 exec("gphoto2 --port usb:"+listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , function (error, stdout, stderr) {
     	           resolve();
-                   console.log(error);
-                   console.log(stdout);
-                   console.log(stderr);
                 });
             });
             listPromesses.push(promesse)
 	    };
         Promise.all(listPromesses).then((values) => {
-            callback(listPictures); 
+            callback(listPictures);
         });
 	}
 }
