@@ -12,18 +12,21 @@ import { listPicture } from './picture/listPicture';
 var __dirname = process.env.PWD;
 
 var cams = new Cameras;
-cams.init(function(){
-	document.getElementById('cam_status').innerHTML = "The cameras are ready <br> press Space to take a picture";
-});
+cams.init();
+
+
 
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   if (keyName === ' ') {
   	document.getElementById('cam_status').innerHTML = "Please wait";
-	  	cams.takePictures(function(list){
-	  		var pictures = new listPicture();
-	  		pictures.init(list);
-	  		pictures.displayPicture();
+	cams.takePictures().then(function (content) {
+		   	var pictures = new listPicture();
+		   	pictures.init(content);
+			pictures.displayPicture();
+		}).catch(function (err) {
+		    console.error('Erreur !');
+		   	alert(err);
 		});
   }
 }, false);
