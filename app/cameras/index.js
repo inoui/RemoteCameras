@@ -7,7 +7,9 @@ export class Cameras {
 
     init(callback) {
 	    exec("gphoto2 --auto-detect", function(error, stdout, stderr) {
-	        console.log(stdout);
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
 	        for (var i = 0; i < stdout.length; i++) {
 	            if ((stdout[i]=='u')&&(stdout[i+1]=='s')&& (stdout[i+2]=='b')){
 	                var nameport = '';
@@ -32,6 +34,7 @@ export class Cameras {
             console.log(path);
             listPictures.push(path);
 	        var promesse = new Promise((resolve, reject) => {
+                console.log(listPorts[i]);
                 exec("gphoto2 --port usb:"+listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , function (error, stdout, stderr) {
     	           resolve();
                 });
