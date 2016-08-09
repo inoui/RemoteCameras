@@ -7,40 +7,59 @@ var $ = require("jquery");
 import { Cameras } from './cameras/index';
 import { Controller } from './controller/controller';
 import { listPicture } from './picture/listPicture';
-
-
 var __dirname = process.env.PWD;
 
 var cams = new Cameras;
-cams.init();
+var canTakePicture = true;
+
+$('#container').html("Please wait during the initialisation");
+
+// var control = new Controller(()=>{
+//     cams.init();
+//     control.waitPushButton(()=>{
+//         takeAndDisplay();
+//       });
+// });
 
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   if (keyName === ' ') {
-  	$('#container').html("Please wait");
-	cams.takePictures().then(function(err) {
-			console.error('Erreur !' + err);
-		   	alert("Could not take any photo.");
-		   	cams.displayInit();
-		}).catch((content)=> {
-		   	var pictures = new listPicture();
-		   	pictures.init(content,cams.getlistPorts());
-			pictures.displayPictureRenameAll(function(){
-				cams.displayInit();
-			});
-		});
+    takeAndDisplay();
   }
 }, false);
 
-// var pictures = new listPicture();
-// var list = [["/Users/Maelle/Desktop/RemoteCameras/pictures/1470327908/picture.jpg","00"],["/Users/Maelle/Desktop/RemoteCameras/pictures/1470327908/picture0.jpg","000"]];
-// pictures.init(list);
-// pictures.displayPictureRenameAll();
 
-var control = new Controller();
-// console.log("1");
-// control.init();
-// console.log("2");
+var pics = new listPicture();
+var listpath = ["/home/thomas/Desktop/RemoteCameras/pictures/1470745928/picture0.jpg","/home/thomas/Desktop/RemoteCameras/pictures/1470745928/picture1.jpg"];
+var listport = ["bla","bli"];
+pics.init(listpath,listport);
+pics.displayPictureRenameAll(function(){
+  cams.displayInit();
+});
+
+function takeAndDisplay() {
+  if(canTakePicture == true){
+    canTakePicture = false;
+    $('#container').html("Please wait");
+    cams.takePictures().then(function(err) {
+      console.error('Erreur !' + err);
+        alert("Could not take any photo.");
+        cams.displayInit();
+        canTakePicture = true;
+    }).catch((content)=> {
+        var pictures = new listPicture();
+        pictures.init(content,cams.getlistPorts());
+        pictures.displayPictureRenameAll(function(){
+          cams.displayInit();
+          canTakePicture = true;
+      });
+    });
+  }
+  else{
+    console.log("Can't take a photo right now");
+  }
+
+}
 
 
 // Node modules are required the same way as always.

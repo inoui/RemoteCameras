@@ -12,14 +12,14 @@ export class Cameras {
     }
 
     displayInit(){
-    	this.getListPorts( (list) =>{ 
-	    	this.listPorts = list; 	
+    	this.getListPorts( (list) =>{
+	    	this.listPorts = list;
 	    	var reloadButton = " <br><br> <input type='button' value='reload' id='reload'>";
 			if( list.length== 0){
 				$('#container').html("No camera detected" + reloadButton);
-			} 
+			}
 			else{
-				$('#container').html("Number of camera detected : <br><strong>" + list.length + " </strong><br> <br> press Space to take a picture" + reloadButton);
+				$('#container').html("Number of camera detected : <br><strong>" + list.length + " </strong><br> <br> press Space or the button to take a picture" + reloadButton);
 			}
 			$("#reload").on('click', ()=> {
 				this.displayInit();
@@ -51,7 +51,7 @@ export class Cameras {
 	        callback(list);
     	});
     }
-    
+
 	takePictures(callback) {
 		var date = moment().unix();
         var listPromesses = [];
@@ -59,8 +59,8 @@ export class Cameras {
             var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
 	        var promesse = new Promise((resolve, reject) => {
                 exec("gphoto2 --port usb:"+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
-    	           if(stderr!=""){ resolve(stderr); }
-    	           else if(error!=null){ resolve(error); }
+    	           if(stderr!=""){ console.log(stderr); resolve(stderr); }
+    	           else if(error!=null){ console.log(err); resolve(error); }
     	           else{ reject(__dirname+"/pictures/"+ date.toString()); }
                 });
             });

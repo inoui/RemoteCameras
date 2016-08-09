@@ -12,11 +12,12 @@ export class listPicture {
     init(date,listPorts) {
         this.pictures = [];
     	for (var i = 0; i < listPorts.length; i++) {
-            var path = date+"/picture"+i+".jpg";
+        var path = date+"/picture"+i+".jpg";
     		console.log("init = " + listPorts[i])
     		var pic = new Picture;
-    		pic.init(path,listPorts[i]);
-    		console.log("created" + pic.getName())
+    		//pic.init(path,listPorts[i]);
+        pic.init(date[i],listPorts[i]);
+        console.log("created :" + pic.getName())
     		this.pictures.push(pic);
     	};
     }
@@ -25,31 +26,31 @@ export class listPicture {
 		return this.pictures;
 	}
 
-	displayPicture() {
-        $("#cam_status").text('Your images');
-        var template = $('#imageList').html();
-        var compiled = _.template(template);
-        $("#container").remove('.listImages').append(compiled({images:this.pictures}));
-
-        $("#rename").on('click', () => {
-            var name = $("#newname").val();
-            console.log(name);
-            for (var i = 0; i < this.pictures.length; i++) {
-                this.pictures[i].setName(`${name}-${i}.jpg`);
-            }
-        });
-        $("#openFolder").on('click', () => {
-            gui.Shell.showItemInFolder(this.pictures[0].src);
-        })
-        $("#newImage").on('click', function() {
-            $('#container').html('<p id="cam_status">The cameras are ready <br> press Space to take a picture</p>')
-        });
-
-	}
+	// displayPicture() {
+  //       $("#cam_status").text('Your images');
+  //       var template = $('#imageList').html();
+  //       var compiled = _.template(template);
+  //       $("#container").remove('.listImages').append(compiled({images:this.pictures}));
+  //
+  //       $("#rename").on('click', () => {
+  //           var name = $("#newname").val();
+  //           console.log(name);
+  //           for (var i = 0; i < this.pictures.length; i++) {
+  //               this.pictures[i].setName(`${name}-${i}.jpg`);
+  //           }
+  //       });
+  //       $("#openFolder").on('click', () => {
+  //           gui.Shell.showItemInFolder(this.pictures[0].src);
+  //       })
+  //       $("#newImage").on('click', function() {
+  //           $('#container').html('<p id="cam_status">The cameras are ready <br> press Space to take a picture</p>')
+  //       });
+  //
+	// }
 
     displayPictureRenameAll(cb) {
 
-        $("#cam_status").text('Your images');
+        $("#container").html('Your images : ');
         var template = $('#imageListRenameAll').html();
         var compiled = _.template(template);
         $("#container").remove('.imageListRenameAll').append(compiled({images:this.pictures}));
@@ -59,7 +60,11 @@ export class listPicture {
                 this.pictures[i].setName(`${name}-${i}.jpg`);
             }
         });
-        $(".newPicture").on('click', () => {
+        $(".newPicture").on('click', function() {
+          var index = $(this).index()
+          console.log( "That was div index #" + index );
+          var ID=$(this).data();
+            console.log(ID);
             for (var i = 0; i < this.pictures.length; i++) {
                 var current_pic = this.pictures[i];
                 current_pic.takeNewOne().then( (content)=> {
@@ -71,7 +76,6 @@ export class listPicture {
                     });
                 }).catch(function (err) {
                     console.error('Erreur!');
-                    alert("erererer" + err);
                 });
             }
         });

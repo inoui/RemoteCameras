@@ -7,6 +7,9 @@ export class Picture {
     usb;
 
 	init(path, usb){
+    console.log(path);
+    console.log(usb);
+
 		this.path = path;
         this.usb = usb;
 	}
@@ -19,6 +22,9 @@ export class Picture {
 
     get src() {
         return this.path;
+    }
+    get usbID() {
+        return this.usb;
     }
 
     get name() {

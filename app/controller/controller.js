@@ -1,23 +1,23 @@
 nw.require("nwjs-j5-fix").fix();
-var five = require("johnny-five"),
-    board,
-    button,
-    led;
+var five = require("johnny-five");
 
 export class Controller {
-    constructor() {
-    	board = new five.Board();
-	    board.on("ready", function() {
-		    // button = new five.Button(2);
-		    // board.repl.inject({
-		    //   button: button
-		    // });
-			led = new five.Led(13);
-			led.blink(500);
-	    });
-	    console.log("ready!");
-	   //      button.on("up", function() {
-    //     console.log("the button is push");
-    // });
+    board;
+    bumper;
+    constructor(cb) {
+    	this.board = new five.Board();
+	    this.board.on("ready", () => {
+      console.log("board ready");
+      this.bumper = new five.Button(7);
+
+      cb();
+    });
     }
+
+    waitPushButton(cb){
+      this.bumper.on("up",()=>{
+          console.log("button up ");
+          cb();
+      })
+  }
 }
