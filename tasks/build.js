@@ -21,6 +21,8 @@ var paths = {
     copyFromAppDir: [
         './node_modules/**',
         './vendor/**',
+        './fonts/**',
+        './stylesheets/**',
         './**/*.html'
     ],
 }

@@ -12,26 +12,26 @@ import { listPicture } from './picture/listPicture';
 var __dirname = process.env.PWD;
 var cams = new Cameras;
 var $ = require("jquery");
-var Dicer = require('dicer');
-
-const spawn = require('child_process').spawn;
-const lp = spawn('gphoto2', ['--capture-movie', '--stdout']);
-
-var srcBoundary = "--videoboundary";
-var dicer = new Dicer({ boundary: srcBoundary });
-
-dicer.on('part', function(part) {
-    console.log('part');
-    var frameEncoded = '';
-    part.setEncoding('base64');
-    part.on('header', function(header) { });
-    part.on('data', function(data) {
-        console.log(data);
-         frameEncoded += data; });
-    part.on('end', function() {   $("#img").attr('src', "data:image/jpg;base64,"+frameEncoded.toString("base64"));  });
-});
-
-lp.stdout.pipe('/dev/fakevideo1');
+// var Dicer = require('dicer');
+//
+// const spawn = require('child_process').spawn;
+// const lp = spawn('gphoto2', ['--capture-movie', '--stdout']);
+//
+// var srcBoundary = "--videoboundary";
+// var dicer = new Dicer({ boundary: srcBoundary });
+//
+// dicer.on('part', function(part) {
+//     console.log();
+//     var frameEncoded = '';
+//     part.setEncoding('base64');
+//     part.on('header', function(header) { });
+//     part.on('data', function(data) {
+//         console.log(data);
+//          frameEncoded += data; });
+//     part.on('end', function() {   $("#img").attr('src', "data:image/jpg;base64,"+frameEncoded.toString("base64"));  });
+// });
+//
+// lp.stdout.pipe(dicer);
 
 
 cams.init(function(){
