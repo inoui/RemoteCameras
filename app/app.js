@@ -12,14 +12,19 @@ var __dirname = process.env.PWD;
 var cams = new Cameras;
 var canTakePicture = true;
 
-$('#container').html("Please wait during the initialisation");
 
+
+// INITIALISATION WITH BOARD
+//$('#container').html("Please wait during the initialisation");
 // var control = new Controller(()=>{
 //     cams.init();
 //     control.waitPushButton(()=>{
 //         takeAndDisplay();
 //       });
 // });
+
+//INITIALISATION WITHOUT BOARD
+cams.init();
 
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
@@ -29,14 +34,20 @@ document.addEventListener('keydown', (event) => {
 }, false);
 
 
-var pics = new listPicture();
-var listpath = ["/home/thomas/Desktop/RemoteCameras/pictures/1470745928/picture0.jpg","/home/thomas/Desktop/RemoteCameras/pictures/1470745928/picture1.jpg"];
-var listport = ["bla","bli"];
-pics.init(listpath,listport);
-pics.displayPictureRenameAll(function(){
-  cams.displayInit();
-});
+//QUICK TESTS WITHOUT CAMERA
+// var pics = new listPicture();
+// var date = __dirname + "/pictures/1470755595";
+// var listport = ["bla","bli"];
+// pics.init(date,listport);
+//DISPLAY PICTURES
+// pics.displayPictureRenameAll(function(){
+//   cams.displayInit();
+// });
+//COMPARE PICTURES
+// pics.compare(pics.getPictures(0).picId,pics.getPictures(1).picId,function(){
+// });
 
+//----------
 function takeAndDisplay() {
   if(canTakePicture == true){
     canTakePicture = false;

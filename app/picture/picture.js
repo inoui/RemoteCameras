@@ -1,15 +1,18 @@
 var fs = require('fs');
 var exec = require('child_process').exec;
+var $ = require("jquery");
 
 
 export class Picture {
     path;
     usb;
+    id;
 
-	init(path, usb){
-    console.log(path);
-    console.log(usb);
-
+	init(id, path, usb){
+        console.log(id);
+        console.log(path);
+        console.log(usb);
+        this.id = id;
 		this.path = path;
         this.usb = usb;
 	}
@@ -27,6 +30,10 @@ export class Picture {
         return this.usb;
     }
 
+    get picId() {
+        return this.id;
+    }
+
     get name() {
         return name.toString().substring(1);
     }
@@ -35,7 +42,6 @@ export class Picture {
     	return this.path;
     }
 	setName(newname) {
-
         var newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, newname);
         fs.rename( this.path, newpath, function(err) {
             console.log(err);
@@ -44,18 +50,22 @@ export class Picture {
 	}
 
     takeNewOne(){
+        $("#container").html('Please wait');
         var newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, this.getName().substring(0, this.getName().length - 4)+ "-0.jpg");
         var promesse = new Promise((resolve, reject) => {
             exec("gphoto2 --port usb:"+this.usb+" --capture-image-and-download  -F 1000 --filename "+ newpath, (error, stdout, stderr) => {
                if(stderr!=""){ reject(stderr); }
                else if(error!=null){ reject(error); }
-               else{ resolve([newpath,this.usb]); }
+              //__dirname+"/pictures/"+ date.toString()
+               else{ alert(this.path.replace(/\[a-z0-9._-]+\.jpg/, ""));resolve(this.path.replace(/\[a-z0-9._-]+\.jpg/, "")); }
             });
         });
         return promesse;
     }
-    compare(pic,cd){
-        alert("On choisit une des 2 images");
-        cd();
+
+    deletePicture(){
+        fs.unlink(this.path,function(){
+
+        });
     }
 }
