@@ -168,21 +168,33 @@
         <p id="cam_status"></p>
     </div>
 
-
-
-
-    <script type="text/template" id="imageList">
+    <script type="text/template" id="imageListRenameAll">
         <ul class="listImages">
             <% _.each(images,function(img) { %>
-               <li>
+               <li data-id="<%=img.picId%>" >
                     <img src="file://<%= img.src %>" alt="">
                     <span><%= img.name %></span>
+                    <input type="text" name="images-name" placeholder="images name" id="newname"><br>
+                    <input type="button" value="rename" class="rename"> <br><br>
+                    <input type="button" value="new picture" class ="newPicture"> <br><br>
+
                 </li>
             <% }); %>
         </ul>
+        <input type="button" value="open folder" id="openFolder"><br><br>
+        <input type="button" value="New images" id="newImage"><br><br>
+    </script>
 
-        <input type="text" name="images-name" placeholder="images name" id="newname"><br>
-        <input type="button" value="rename" id="rename"> <br><br>
+    <script type="text/template" id="compareImage">
+        <ul class="listImages">
+            <% _.each(images,function(img) { %>
+               <li data-id="<%=img.picId%>" >
+                    <img src="file://<%= img.src %>" alt="">
+                    <span><%= img.name %></span>
+                    <input type="button" value="keep this image" class="keep"> <br><br>
+                </li>
+            <% }); %>
+        </ul>
         <input type="button" value="open folder" id="openFolder"><br><br>
         <input type="button" value="New images" id="newImage"><br><br>
     </script>
