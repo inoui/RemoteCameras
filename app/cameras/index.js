@@ -10,6 +10,7 @@ export class Cameras {
         $('.panel#camerasPanel').on('click', "[data-action]", $.proxy(this._action, this));
         exec("killall PTPCamera");
 		this.listPorts = [];
+        this._isTakingAPhoto = false;
     	this.displayInit();
     }
 
@@ -22,9 +23,6 @@ export class Cameras {
             this[action](evt);
         };
     }
-
-
-
 
     displayInit(){
     	this.getListPorts( (list) =>{
@@ -57,6 +55,14 @@ export class Cameras {
     }
 
 
+    get isTakingAPhoto() {
+        return this._isTakingAPhoto;
+    }
+
+    set isTakingAPhoto(newValue) {
+        this._isTakingAPhoto = newValue; 
+    }
+
     getListPorts(callback){
     	var list=[];
     	exec("gphoto2 --auto-detect", (error, stdout, stderr) =>{
@@ -83,8 +89,8 @@ export class Cameras {
             var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
 	        var promesse = new Promise((resolve, reject) => {
                 exec("gphoto2 --port usb:"+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
-    	           if(stderr!=""){ console.log(stderr); resolve(stderr); }
-    	           else if(error!=null){ console.log(err); resolve(error); }
+    	           if(stderr!=""){ resolve(stderr); }
+    	           else if(error!=null){ resolve(error); }
     	           else{ reject(__dirname+"/pictures/"+ date.toString()); }
                 });
             });

@@ -108,17 +108,17 @@
                         <% _.each(images,function(img) { %>
 
                           <div class="col-md-4">
-                              <section class="panel">
+                              <section class="panel" data-id="<%= img.picId %>">
                                   <div class="pro-img-box">
-                                      <img src="file://<%= img.src %>" alt="">
-                                      <a href="#" class="adtocart" data-action="retakePicture">
+                                      <img class="img" src="file://<%= img.src %>" alt="">
+                                      <a href="#" class="adtocart" data-id="<%= img.picId %>" data-action="retakePicture">
                                           <i class="fa fa-refresh"></i>
                                       </a>
                                   </div>
 
-                                  <div class="panel-body text-center">
+                                  <div class="panel-body text-center" data-id="<%= img.picId %>">
                                       <h4>
-                                          <a href="#" class="pro-title"  data-action="initRename">
+                                          <a href="#" class="pro-title" data-action="initRename">
                                               <%= img.name %>
                                           </a>
                                       </h4>
@@ -126,8 +126,6 @@
                               </section>
                           </div>
                           <% }); %>
-
-
                     </div>
                 </div>
         </section>

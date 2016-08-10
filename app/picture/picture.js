@@ -9,9 +9,6 @@ export class Picture {
     id;
 
 	init(id, path, usb){
-        console.log(id);
-        console.log(path);
-        console.log(usb);
         this.id = id;
 		this.path = path;
         this.usb = usb;
@@ -35,29 +32,48 @@ export class Picture {
     }
 
     get name() {
+        var name = /\/[a-z0-9._-]+\.jpg/.exec(this.path);
         return name.toString().substring(1);
     }
 
     getPath() {
     	return this.path;
     }
-	setName(newname) {
-        var newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, newname);
-        fs.rename( this.path, newpath, function(err) {
-            console.log(err);
-        });
-        this.path = newpath;
+	setName(newname,cb) {
+        console.log("setName")
+        var pattern = new RegExp(/[a-z0-9._-]+\.jpg/)
+        var newpath;
+        if(pattern.test(newname)){
+            newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, newname);
+        }
+        else{
+            newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, newname+".jpg");
+        }
+        this.renameFolder(newpath,function(){
+            cb();
+        }); 
 	}
+    renameFolder(newpath,cb){
+        fs.open(newpath, 'r', (err, fd)=> {
+            if(err!=null){
+                fs.rename( this.path, newpath, function(err) {
+                    if(err!= null) console.log(err);
+                });
+                this.path = newpath;
+            }
+            else{
+                alert("Ce nom existe déjà")
+            } 
+            cb();
+        });
+    }
 
     takeNewOne(){
-        $("#container").html('Please wait');
-        var newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, this.getName().substring(0, this.getName().length - 4)+ "-0.jpg");
         var promesse = new Promise((resolve, reject) => {
-            exec("gphoto2 --port usb:"+this.usb+" --capture-image-and-download  -F 1000 --filename "+ newpath, (error, stdout, stderr) => {
+            exec("gphoto2 --port usb:"+ this.usb +" --capture-image-and-download --filename "+ this.path + " --force-overwrite", (error, stdout, stderr) => {
                if(stderr!=""){ reject(stderr); }
                else if(error!=null){ reject(error); }
-              //__dirname+"/pictures/"+ date.toString()
-               else{ alert(this.path.replace(/\[a-z0-9._-]+\.jpg/, ""));resolve(this.path.replace(/\[a-z0-9._-]+\.jpg/, "")); }
+               else{ resolve(); }
             });
         });
         return promesse;

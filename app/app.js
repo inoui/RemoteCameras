@@ -10,9 +10,6 @@ import { listPicture } from './picture/listPicture';
 var __dirname = process.env.PWD;
 
 var cams = new Cameras;
-var canTakePicture = true;
-
-
 
 // INITIALISATION WITH BOARD
 //$('#container').html("Please wait during the initialisation");
@@ -26,6 +23,7 @@ var canTakePicture = true;
 //INITIALISATION WITHOUT BOARD
 cams.init();
 
+
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   if (keyName === ' ') {
@@ -34,23 +32,17 @@ document.addEventListener('keydown', (event) => {
 }, false);
 
 
-//QUICK TESTS WITHOUT CAMERA
+//QUICK TEST WITHOUT CAMERA : DISPLAY PICTURES
 // var pics = new listPicture();
 // var date = __dirname + "/pictures/1470755595";
-// var listport = ["bla","bli"];
+// var listport = ["020,013","020,013"];
 // pics.init(date,listport);
-//DISPLAY PICTURES
-// pics.displayPictureRenameAll(function(){
-//   cams.displayInit();
-// });
-//COMPARE PICTURES
-// pics.compare(pics.getPictures(0).picId,pics.getPictures(1).picId,function(){
-// });
+// pics.displayPicture();
 
 //----------
 function takeAndDisplay() {
-  if(canTakePicture == true){
-    canTakePicture = false;
+  if(cams.isTakingAPhoto  == false){
+    cams.isTakingAPhoto = true;
     $('.message').html("Please wait");
 
     cams.takePictures()
@@ -58,14 +50,15 @@ function takeAndDisplay() {
             console.error('Erreur !' + err);
             alert("Could not take any photo.");
             cams.displayInit();
-            canTakePicture = true;
+            cams.isTakingAPhoto = false;
         })
         .catch((content)=> {
+            alert(content)
             var pictures = new listPicture();
             pictures.init(content, cams.getlistPorts());
-            pictures.displayPictureRenameAll(function(){
+            pictures.displayPicture(function(){
                 cams.displayInit();
-                canTakePicture = true;
+                cams.isTakingAPhoto = false;
             });
         });
   }
