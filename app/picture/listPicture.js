@@ -54,18 +54,18 @@ export class listPicture {
 
     displayPictureRenameAll(cb) {
 
-        $("#container").html('Your images : ');
+        // $("content-receipt").html('Your images : ');
         var template = $('#imageListRenameAll').html();
         var compiled = _.template(template);
         var that = this;
-        $("#container").remove('.imageListRenameAll').append(compiled({images:this.pictures}));
+        $("#content-receipt").html(compiled({images:this.pictures}));
         $(".rename").on('click', function(){
             var name = $("#newname").val();
             console.log(name);
             var current_pic = that.pictures[$(this).parent().data("id")];
             current_pic.setName(`${name}.jpg`);
         });
-        
+
         $(".newPicture").on('click', function() {
           var current_pic = that.pictures[$(this).parent().data("id")];
           current_pic.takeNewOne().then( (content)=> {
@@ -98,7 +98,7 @@ export class listPicture {
         alert(newPicID)
 
         $("#container").remove('.compareImage').append(compiled({images:[that.pictures[oldPicId],that.pictures[newPicID]]}));
-        $(".keep").on('click', function(){ 
+        $(".keep").on('click', function(){
             var clickPicId = $(this).parent().data("id");
             if($(this).parent().data("id") == oldPicId){
               that.pictures[newPicID].deletePicture();

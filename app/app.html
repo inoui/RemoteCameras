@@ -74,115 +74,64 @@
 
 
         <section id="main-content">
-          <section class="wrapper ">
+          <section class="wrapper " id="content-receipt">
 
-              <section class="panel">
+              <section class="panel" id="camerasPanel">
+
                   <header class="panel-heading" align="center">
                     Packshots
                   </header>
                   <div class="panel-body" align="center">
-                      <button type="submit" class="btn btn-primary start">
-                        <i class="glyphicon glyphicon-upload"></i>
-                        <span>Appuyer sur le bouton</span>
-                    </button>
+                    <div class="message"></div>
                   </div>
+
               </section>
 
 
-              <section class="panel">
-                  <header class="panel-heading" align="center">
-                    Vos images
-                  </header>
-                  <div class="panel-body" align="center">
-
-
-                        <div class="row product-list">
-                              <div class="col-md-4">
-                                  <section class="panel">
-                                      <div class="pro-img-box">
-                                          <img src="http://placekitten.com/1980/1200" alt="">
-                                          <a href="#" class="adtocart">
-                                              <i class="fa fa-refresh"></i>
-                                          </a>
-                                      </div>
-
-                                      <div class="panel-body text-center">
-                                          <h4>
-                                              <a href="#" class="pro-title">
-                                                  Image 1
-                                              </a>
-                                          </h4>
-                                      </div>
-                                  </section>
-                              </div>
-                              <div class="col-md-4">
-                                  <section class="panel">
-                                      <div class="pro-img-box">
-                                          <img src="http://placekitten.com/1980/1200" alt="">
-                                          <a href="#" class="adtocart">
-                                              <i class="fa fa-refresh"></i>
-                                          </a>
-                                      </div>
-
-                                      <div class="panel-body text-center">
-                                          <h4>
-                                              <a href="#" class="pro-title">
-                                                  Image 2
-                                              </a>
-                                          </h4>
-
-                                      </div>
-                                  </section>
-                              </div>
-                              <div class="col-md-4">
-                                  <section class="panel">
-                                      <div class="pro-img-box">
-                                          <img src="http://placekitten.com/1980/1200" alt="">
-                                          <a href="#" class="adtocart">
-                                              <i class="fa fa-refresh"></i>
-                                          </a>
-                                      </div>
-
-                                      <div class="panel-body text-center">
-                                          <h4>
-                                              <a href="#" class="pro-title">
-                                                  Image 3
-                                              </a>
-                                          </h4>
-
-                                      </div>
-                                  </section>
-                              </div>
-
-                        </div>
-                    </div>
-            </section>
         </section>
     </section>
 </section>
 
 
 
-
-    <div class="container" id="container">
-        <p id="cam_status"></p>
-    </div>
-
     <script type="text/template" id="imageListRenameAll">
-        <ul class="listImages">
-            <% _.each(images,function(img) { %>
-               <li data-id="<%=img.picId%>" >
-                    <img src="file://<%= img.src %>" alt="">
-                    <span><%= img.name %></span>
-                    <input type="text" name="images-name" placeholder="images name" id="newname"><br>
-                    <input type="button" value="rename" class="rename"> <br><br>
-                    <input type="button" value="new picture" class ="newPicture"> <br><br>
 
-                </li>
-            <% }); %>
-        </ul>
-        <input type="button" value="open folder" id="openFolder"><br><br>
-        <input type="button" value="New images" id="newImage"><br><br>
+          <section class="panel" id="imagesPanel">
+              <header class="panel-heading" align="center">
+                Vos images
+              </header>
+              <div class="panel-body" align="center">
+
+
+                    <div class="row product-list">
+
+                        <% _.each(images,function(img) { %>
+
+                          <div class="col-md-4">
+                              <section class="panel">
+                                  <div class="pro-img-box">
+                                      <img src="file://<%= img.src %>" alt="">
+                                      <a href="#" class="adtocart" data-action="retakePicture">
+                                          <i class="fa fa-refresh"></i>
+                                      </a>
+                                  </div>
+
+                                  <div class="panel-body text-center">
+                                      <h4>
+                                          <a href="#" class="pro-title"  data-action="initRename">
+                                              <%= img.name %>
+                                          </a>
+                                      </h4>
+                                  </div>
+                              </section>
+                          </div>
+                          <% }); %>
+
+
+                    </div>
+                </div>
+        </section>
+
     </script>
 
     <script type="text/template" id="compareImage">

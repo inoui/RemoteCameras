@@ -5,26 +5,50 @@ var __dirname = process.env.PWD;
 
 export class Cameras {
 	listPorts;
-    init() {
 
+    init() {
+        $('.panel#camerasPanel').on('click', "[data-action]", $.proxy(this._action, this));
+        exec("killall PTPCamera");
 		this.listPorts = [];
     	this.displayInit();
     }
 
+    _action(evt) {
+        evt && evt.preventDefault();
+        var $a = $(evt.currentTarget);
+        var action = $a.data('action');
+
+        if (this[action] !== undefined) {
+            this[action](evt);
+        };
+    }
+
+
+
+
     displayInit(){
     	this.getListPorts( (list) =>{
 	    	this.listPorts = list;
-	    	var reloadButton = " <br><br> <input type='button' value='reload' id='reload'>";
+
 			if( list.length== 0){
-				$('#container').html("No camera detected" + reloadButton);
+
+                var reloadButton = `<button type="button" class="btn btn-warning" data-action="displayInit">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                            <span class="message">Recharger</span>
+                        </button>`;
+
+				$('.message').html("Aucuns appareils détéctés <br><br>" + reloadButton);
 			}
 			else{
-				$('#container').html("Number of camera detected : <br><strong>" + list.length + " </strong><br> <br> press Space or the button to take a picture" + reloadButton);
+                var okButton = `${list.length} appareils détectés<br><br>
+                <button type="button" class="btn btn-primary start" >
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>Appuyer sur espace ou le bouton</span>
+                    </button>`;
+
+                $('.message').html(okButton);
+
 			}
-			$("#reload").on('click', ()=> {
-				this.displayInit();
-				$('#container').html("loading");
-			});
     	});
     }
 

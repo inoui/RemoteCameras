@@ -51,20 +51,23 @@ document.addEventListener('keydown', (event) => {
 function takeAndDisplay() {
   if(canTakePicture == true){
     canTakePicture = false;
-    $('#container').html("Please wait");
-    cams.takePictures().then(function(err) {
-      console.error('Erreur !' + err);
-        alert("Could not take any photo.");
-        cams.displayInit();
-        canTakePicture = true;
-    }).catch((content)=> {
-        var pictures = new listPicture();
-        pictures.init(content,cams.getlistPorts());
-        pictures.displayPictureRenameAll(function(){
-          cams.displayInit();
-          canTakePicture = true;
-      });
-    });
+    $('.message').html("Please wait");
+
+    cams.takePictures()
+        .then(function(err) {
+            console.error('Erreur !' + err);
+            alert("Could not take any photo.");
+            cams.displayInit();
+            canTakePicture = true;
+        })
+        .catch((content)=> {
+            var pictures = new listPicture();
+            pictures.init(content, cams.getlistPorts());
+            pictures.displayPictureRenameAll(function(){
+                cams.displayInit();
+                canTakePicture = true;
+            });
+        });
   }
   else{
     console.log("Can't take a photo right now");
