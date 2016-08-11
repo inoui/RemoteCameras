@@ -30,91 +30,73 @@ export class listPicture {
     return this.pictures[i];
   }
 
-	// displayPicture() {
-  //       $("#cam_status").text('Your images');
-  //       var template = $('#imageList').html();
-  //       var compiled = _.template(template);
-  //       $("#container").remove('.listImages').append(compiled({images:this.pictures}));
-  //
-  //       $("#rename").on('click', () => {
-  //           var name = $("#newname").val();
-  //           console.log(name);
-  //           for (var i = 0; i < this.pictures.length; i++) {
-  //               this.pictures[i].setName(`${name}-${i}.jpg`);
-  //           }
-  //       });
-  //       $("#openFolder").on('click', () => {
-  //           gui.Shell.showItemInFolder(this.pictures[0].src);
-  //       })
-  //       $("#newImage").on('click', function() {
-  //           $('#container').html('<p id="cam_status">The cameras are ready <br> press Space to take a picture</p>')
-  //       });
-  //
-	// }
+  displayPicture() {
+      var template = $('#imageListRenameAll').html();
+      var compiled = _.template(template);
+      $("#content-receipt").html(compiled({images:this.pictures}));
+      $('.panel').on('click', "[data-action]", $.proxy(this._action, this));
 
-    displayPictureRenameAll(cb) {
+      $("#openFolder").on('click', () => {
+          gui.Shell.showItemInFolder(this.pictures[0].src);
+      })
+  }
 
-        // $("content-receipt").html('Your images : ');
-        var template = $('#imageListRenameAll').html();
-        var compiled = _.template(template);
-        var that = this;
-        $("#content-receipt").html(compiled({images:this.pictures}));
-        $(".rename").on('click', function(){
-            var name = $("#newname").val();
-            console.log(name);
-            var current_pic = that.pictures[$(this).parent().data("id")];
-            current_pic.setName(`${name}.jpg`);
-        });
+  _action(evt) {
+    evt && evt.preventDefault();
+    var $elt = $(evt.currentTarget);
+    var action = $elt.data('action');
 
-        $(".newPicture").on('click', function() {
-          var current_pic = that.pictures[$(this).parent().data("id")];
-          current_pic.takeNewOne().then( (content)=> {
-              var pic = new Picture;
-              pic.init(that.pictures.length +1 ,content, current_pic.usbID);
-              that.pictures.push(pic);
-              that.compare(current_pic.picId,pic.picId,()=>{
-                    pictures.displayPictureRenameAll(function(){
-                  });
-              });
-          }).catch(function (err) {
-              console.error(err);
-          });
-        });
-        $("#openFolder").on('click', () => {
-            gui.Shell.showItemInFolder(this.pictures[0].src);
-        })
-        $("#newImage").on('click', ()=> {
-            cb();
-        });
-    }
+    if (this[action] !== undefined) {
+        this[action](evt);
+    };
+  }
+  retakePicture(evt){
+    var pic = "file:///Users/Maelle/Desktop/RemoteCameras/pictures/1470755595/lala.jpg"
+    console.log("Retakepicture")
+    evt.stopPropagation()
+    $('.panel-body').html("Please wait");
+    var $elt = $(evt.currentTarget)
+    var current_pic = this.pictures[$elt.data('id')];
+    current_pic.takeNewOne().then( (content)=> {
+        this.displayPicture();
+      //ICI RECHARGER LES IMAGES
+      $elt.parent().html();
+    }).catch( (err)=> {
+        console.error(err);
+        this.displayPicture();
+    });
+  }
 
-    compare(oldPicId,newPicID,cb){
-        alert("On choisit une des 2 images");
-        $("#container").html('Choose one image ');
-        var template = $('#compareImage').html();
-        var compiled = _.template(template);
-        var that = this;
-        alert(oldPicId)
-        alert(newPicID)
+  initRename(evt){
+    console.log("Rename")
+    var $elt = $(evt.currentTarget)
+    var id = $elt.parent().parent().data('id');
+    $elt.parent().html('<br><input type="text" name="images-name" placeholder="Nouveau nom" id="newname'+ id+ '"><br><br> <input type="button" value="Valider" class="rename" data-action="rename"> <br><br>');
+  }
 
-        $("#container").remove('.compareImage').append(compiled({images:[that.pictures[oldPicId],that.pictures[newPicID]]}));
-        $(".keep").on('click', function(){
-            var clickPicId = $(this).parent().data("id");
-            if($(this).parent().data("id") == oldPicId){
-              that.pictures[newPicID].deletePicture();
-            }
-            else{
-              var name = that.pictures[oldPicId].getName();
-              that.pictures[oldPicId].deletePicture();
-              that.pictures[newPicID].setName(name);
-            }
-            cb();
-        });
-        $("#openFolder").on('click', () => {
-            gui.Shell.showItemInFolder(this.pictures[0].src);
-        })
-        $("#newImage").on('click', ()=> {
-            cb();
-        });
-    }
+  rename(evt){
+    evt.stopPropagation()
+    var $elt = $(evt.currentTarget)
+    var id = $elt.parent().parent().data('id');
+    var name = $("#newname"+id).val();
+    this.pictures[id].setName(`${name}`,()=>{
+      $elt.parent().html('<a href="#" class="pro-title" data-action="initRename"> '+this.pictures[id].name +' </a>');
+    });
+
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
