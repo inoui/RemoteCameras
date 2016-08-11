@@ -5,13 +5,14 @@
 var $ = require("jquery");
 // Browser modules are imported through new ES6 syntax.
 import { Cameras } from './cameras/index';
+import { Preferences } from './preferences/index';
 import { Controller } from './controller/controller';
 import { listPicture } from './picture/listPicture';
 var __dirname = process.env.PWD;
 
 var cams = new Cameras;
 var canTakePicture = true;
-
+var pref = new Preferences
 
 
 // INITIALISATION WITH BOARD

@@ -8,7 +8,18 @@ export class Cameras {
 
     init() {
         $('.panel#camerasPanel').on('click', "[data-action]", $.proxy(this._action, this));
-        exec("killall PTPCamera");
+        exec("ps -ax | grep PTPC", function(error, stdout, stderr) {
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+
+            var n = stdout.search("PTPCamera");
+            if (n > 0) {
+                exec("killall PTPCamera", function() {
+                    chrome.runtime.reload();
+                });
+            }
+        });
 		this.listPorts = [];
     	this.displayInit();
     }
