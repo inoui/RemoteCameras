@@ -30,17 +30,16 @@ export class listPicture {
     return this.pictures[i];
   }
 
-  displayPicture() {
+  displayPicture(cb){
       var template = $('#imageListRenameAll').html();
       var compiled = _.template(template);
       $("#content-receipt").html(compiled({images:this.pictures}));
+      // $("#successDisplay").on('click', ()=> {
+      //   cb();
+      // });
       $('.panel').on('click', "[data-action]", $.proxy(this._action, this));
 
-      $("#openFolder").on('click', () => {
-          gui.Shell.showItemInFolder(this.pictures[0].src);
-      })
   }
-
   _action(evt) {
     evt && evt.preventDefault();
     var $elt = $(evt.currentTarget);
@@ -51,19 +50,16 @@ export class listPicture {
     };
   }
   retakePicture(evt){
-    var pic = "file:///Users/Maelle/Desktop/RemoteCameras/pictures/1470755595/lala.jpg"
     console.log("Retakepicture")
     evt.stopPropagation()
     $('.panel-body').html("Please wait");
     var $elt = $(evt.currentTarget)
     var current_pic = this.pictures[$elt.data('id')];
-    current_pic.takeNewOne().then( (content)=> {
-        this.displayPicture();
-      //ICI RECHARGER LES IMAGES
-      $elt.parent().html();
-    }).catch( (err)=> {
-        console.error(err);
-        this.displayPicture();
+    current_pic.takeNewOne(()=> {
+      this.displayPicture();
+      // alert($elt.parent().find('img').attr("src"))
+      // $elt.parent().find('img').attr("src","file:///Users/Maelle/Desktop/RemoteCameras/pictures/1470755595/picture1.jpg")
+      // alert($elt.parent().find('img').attr("src"))
     });
   }
 
@@ -71,7 +67,7 @@ export class listPicture {
     console.log("Rename")
     var $elt = $(evt.currentTarget)
     var id = $elt.parent().parent().data('id');
-    $elt.parent().html('<br><input type="text" name="images-name" placeholder="Nouveau nom" id="newname'+ id+ '"><br><br> <input type="button" value="Valider" class="rename" data-action="rename"> <br><br>');
+    $elt.parent().html('<br><input type="text" name="images-name" placeholder="Nouveau nom" id="newname'+ id+ '"><br><br> <input type="button" value="Valider" class="btn btn-default rename" data-action="rename"> <br><br>');
   }
 
   rename(evt){
@@ -82,7 +78,9 @@ export class listPicture {
     this.pictures[id].setName(`${name}`,()=>{
       $elt.parent().html('<a href="#" class="pro-title" data-action="initRename"> '+this.pictures[id].name +' </a>');
     });
-
+  }
+  openFolder(evt){
+    gui.Shell.showItemInFolder(this.pictures[0].src.replace(/\/[a-z0-9._-]+\.jpg/, ""));
   }
 }
 

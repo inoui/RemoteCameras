@@ -22,7 +22,6 @@ export class Cameras {
         });
 		this.listPorts = [];
         this._isTakingAPhoto = false;
-    	this.displayInit();
     }
 
     _action(evt) {
@@ -50,7 +49,7 @@ export class Cameras {
 			}
 			else{
                 var okButton = `${list.length} appareils détectés<br><br>
-                <button type="button" class="btn btn-primary start" >
+                <button type="button" class="btn btn-primary start" id="buttonTakePicture" >
                         <i class="glyphicon glyphicon-upload"></i>
                         <span>Appuyer sur espace ou le bouton</span>
                     </button>`;
@@ -100,13 +99,18 @@ export class Cameras {
             var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
 	        var promesse = new Promise((resolve, reject) => {
                 exec("gphoto2 --port usb:"+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
-    	           if(stderr!=""){ resolve(stderr); }
-    	           else if(error!=null){ resolve(error); }
-    	           else{ reject(__dirname+"/pictures/"+ date.toString()); }
+    	           if(stderr!=""){ reject(stderr); }
+    	           else if(error!=null){ reject(error); }
+    	           else{ resolve(); }
                 });
             });
             listPromesses.push(promesse)
 	    };
-		return Promise.all(listPromesses);
+		Promise.all(listPromesses).catch((err)=> {
+            console.error('Erreur ' + err);
+        })
+        .then(function(content) {
+            callback(__dirname+"/pictures/"+ date.toString());
+        });
 	}
 }

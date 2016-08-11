@@ -12,7 +12,7 @@ export class Preferences {
 
     constructor() {
         this._settings = {"language": navigator.language};
-        this.loadSettings();
+//        this.loadSettings();
     }
 
     loadSettings() {

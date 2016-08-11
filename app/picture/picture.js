@@ -68,7 +68,7 @@ export class Picture {
         });
     }
 
-    takeNewOne(){
+    takeNewOne(cb){
         var promesse = new Promise((resolve, reject) => {
             exec("gphoto2 --port usb:"+ this.usb +" --capture-image-and-download --filename "+ this.path + " --force-overwrite", (error, stdout, stderr) => {
                if(stderr!=""){ reject(stderr); }
@@ -76,7 +76,12 @@ export class Picture {
                else{ resolve(); }
             });
         });
-        return promesse;
+        promesse.then( (content)=> {     
+            cb();
+        }).catch( (err)=> {
+            console.error(err);
+            cb();
+        });
     }
 
     deletePicture(){
