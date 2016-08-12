@@ -7,7 +7,7 @@ export class Cameras {
 	listPorts;
 
     init() {
-        $('.panel#camerasPanel').on('click', "[data-action]", $.proxy(this._action, this));
+        $('#content-receipt').on('click', "[data-action]", $.proxy(this._action, this));
         exec("ps -ax | grep PTPC", function(error, stdout, stderr) {
             console.log(error);
             console.log(stdout);
@@ -28,7 +28,6 @@ export class Cameras {
         evt && evt.preventDefault();
         var $a = $(evt.currentTarget);
         var action = $a.data('action');
-
         if (this[action] !== undefined) {
             this[action](evt);
         };
@@ -49,7 +48,7 @@ export class Cameras {
 			}
 			else{
                 var okButton = `${list.length} appareils détectés<br><br>
-                <button type="button" class="btn btn-primary start" id="buttonTakePicture" >
+                <button type="button" class="btn btn-primary start" data-action="takePicturesAndDisplay" >
                         <i class="glyphicon glyphicon-upload"></i>
                         <span>Appuyer sur espace ou le bouton</span>
                     </button>`;

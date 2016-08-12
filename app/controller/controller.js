@@ -7,6 +7,7 @@ export class Controller {
     bumper;
 
     constructor(cb) {
+
      this.board = new five.Board();
      this.addBoard(function(){
         cb();
@@ -14,9 +15,6 @@ export class Controller {
      this.addKeyboard(function(){
         cb();
      });
-    // this.addHomeButton(function(){
-    //     cb();
-    //  });
     }
 
     addBoard(cb){
@@ -37,11 +35,4 @@ export class Controller {
       }
       }, false);
     }
-
-    // addHomeButton(cb){
-    //   $("#buttonTakePicture").on('click', ()=> {
-    //       alert("clickkkk")
-    //       cb();
-    //   });
-    // }
 }

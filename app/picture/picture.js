@@ -43,12 +43,17 @@ export class Picture {
         console.log("setName")
         var pattern = new RegExp(/[a-z0-9._-]+\.jpg/)
         var newpath;
-        if(pattern.test(newname)){
+        if(newname==""){
+            cb();
+            return
+        }
+        else if(pattern.test(newname)){
             newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, newname);
         }
         else{
             newpath = this.path.replace(/[a-z0-9._-]+\.jpg/, newname+".jpg");
         }
+
         this.renameFolder(newpath,function(){
             cb();
         }); 

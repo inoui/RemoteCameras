@@ -52,14 +52,18 @@ export class listPicture {
   retakePicture(evt){
     console.log("Retakepicture")
     evt.stopPropagation()
-    $('.panel-body').html("Please wait");
+    $('.panel-body').children().hide();
+    $('.panel-body').append('<div id=tmpPleaseWait >Please Wait</div>');
+
     var $elt = $(evt.currentTarget)
     var current_pic = this.pictures[$elt.data('id')];
     current_pic.takeNewOne(()=> {
-      this.displayPicture();
-      // alert($elt.parent().find('img').attr("src"))
-      // $elt.parent().find('img').attr("src","file:///Users/Maelle/Desktop/RemoteCameras/pictures/1470755595/picture1.jpg")
-      // alert($elt.parent().find('img').attr("src"))
+      $('.panel-body #tmpPleaseWait').remove();
+      $('.panel-body').children().show();
+      console.log($elt.parent().find('img').attr("src"))
+      console.log("file://" + current_pic.src)
+      $elt.parent().find('img').attr("src","")
+      $elt.parent().find('img').attr("src","file://" + current_pic.src);
     });
   }
 
@@ -78,6 +82,7 @@ export class listPicture {
     this.pictures[id].setName(`${name}`,()=>{
       $elt.parent().html('<a href="#" class="pro-title" data-action="initRename"> '+this.pictures[id].name +' </a>');
     });
+
   }
   openFolder(evt){
     gui.Shell.showItemInFolder(this.pictures[0].src.replace(/\/[a-z0-9._-]+\.jpg/, ""));

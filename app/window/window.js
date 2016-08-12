@@ -8,7 +8,8 @@ import { Cameras } from '../cameras/index';
 export class Window {
 	cams;
     constructor(cb) {
-    	this.listenToSideBar();
+    	 $('#content-receipt').on('click', "[data-action]", $.proxy(this._action, this));
+    	 $('#sidebar').on('click', "[data-action]", $.proxy(this._action, this));
     	this.cams = new Cameras;
     	this.cams.init();
 
@@ -16,7 +17,7 @@ export class Window {
     	//QUICK TEST WITHOUT CAMERA : DISPLAY PICTURES
 		// var pics = new listPicture();
 		// var date = "/Users/Maelle/Desktop/RemoteCameras/pictures/1470755595";
-		// var listport = ["020,014","020,014"];
+		// var listport = ["020,005 ","020,005"];
 		// pics.init(date,listport);
 		// pics.displayPicture();
     }
@@ -44,10 +45,6 @@ export class Window {
 			var template = $('#homeDisplay').html();
       		$("#content-receipt").html(_.template(template));
 		}
-	}
-
-	listenToSideBar(){
-		$('#sidebar').on('click', "[data-action]", $.proxy(this._action, this));
 	}
 
 	_action(evt) {
