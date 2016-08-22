@@ -75,30 +75,32 @@ export class Cameras {
     getListPorts(callback){
     	var list=[];
     	exec("gphoto2 --auto-detect", (error, stdout, stderr) =>{
+        //exec("set CAMLIBS=./camlibs", {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, function(error, stdout, stderr){});
+        //exec("set IOLIBS=./iolibs", {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, function(error, stdout, stderr){});
+        //exec("gphoto2.exe gphoto2 --auto-detect", {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, (error, stdout, stderr) =>{
 	        console.log(stdout);
-	        for (var i = 0; i < stdout.length; i++) {
-	            if ((stdout[i]=='u')&&(stdout[i+1]=='s')&& (stdout[i+2]=='b')){
-	                var nameport = '';
-	                var j = i +4;
-	                while ((j < stdout.length)&&(stdout[j]!=' ')){
-	                    nameport+= stdout[j];
-	                    j++;
-	                };
-	                list.push(nameport);
-	            };
-	        };
+
+            this.searchUsbPort(stdout,list);
 	        callback(list);
     	});
     }
-
+    searchUsbPort(stdout,list){
+        var usbport = new RegExp(/usb\:+.*/);
+        var IsaCam = usbport.test(stdout);
+        if (IsaCam){
+           list.push(/usb\:+.*/.exec(stdout));
+           this.searchUsbPort(stdout.replace(usbport, ""),list);
+        }
+    }
 	takePictures(callback) {
 		var date = moment().unix();
         var listPromesses = [];
 	    for (var i = 0; i < this.listPorts.length; i++) {
             var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
 	        var promesse = new Promise((resolve, reject) => {
-                exec("gphoto2 --port usb:"+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
-    	           if(stderr!=""){ reject(stderr); }
+                exec("gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
+    	        //exec("gphoto2.exe gphoto2 --set-config capturetarget=1 --port usb:bus-0,\\.\libusb0-0001--0x04a9-0x32b4 --capture-image-and-download  -F 1000 --filename "+ path, {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, (error, stdout, stderr) => {
+                   if(stderr!=""){ reject(stderr); }
     	           else if(error!=null){ reject(error); }
     	           else{ resolve(); }
                 });

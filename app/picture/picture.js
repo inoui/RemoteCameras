@@ -75,7 +75,7 @@ export class Picture {
 
     takeNewOne(cb){
         var promesse = new Promise((resolve, reject) => {
-            exec("gphoto2 --port usb:"+ this.usb +" --capture-image-and-download --filename "+ this.path + " --force-overwrite", (error, stdout, stderr) => {
+            exec("gphoto2 --port "+ this.usb +" --capture-image-and-download --filename "+ this.path + " --force-overwrite", (error, stdout, stderr) => {
                if(stderr!=""){ reject(stderr); }
                else if(error!=null){ reject(error); }
                else{ resolve(); }
