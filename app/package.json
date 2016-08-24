@@ -1,7 +1,7 @@
 {
-  "name": "remote-cameras",
-  "productName": "Remote Cameras",
-  "description": "Remote Cameras.",
+  "name": "Packshots",
+  "productName": "Packshots",
+  "description": "Packshots.",
   "version": "0.1.0",
   "author": "T Goetz <tom@inoui.io>",
   "main": "app.html",

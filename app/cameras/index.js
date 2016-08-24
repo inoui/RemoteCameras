@@ -4,7 +4,7 @@ var $ = require("jquery");
 var mv = require('mv');
 var fs = require('fs');
 //var __dirname = process.env.PWD;
-var __dirname = process.env.HOME+"/Desktop/Packshots";
+var __dirname = process.env.HOME+"/Desktop";
 
 export class Cameras {
 	listPorts;
@@ -107,16 +107,16 @@ export class Cameras {
 	takePictures(callback) {
                 var date = moment().format("YYYYMMDD");
         var listPromesses = [];
-        fs.readdir(__dirname+"/pictures/"+ date.toString(), (err, files)=> {
+        fs.readdir(__dirname+"/Packshots/"+ date.toString(), (err, files)=> {
             var pathToTake;
             if(files==undefined){
-                pathToTake = __dirname+"/pictures/"+ date.toString() +"/take0";
+                pathToTake = __dirname+"/Packshots/"+ date.toString() +"/take0";
             }
             else{
-               pathToTake = __dirname+"/pictures/"+ date.toString() +"/take"+files.length;
+               pathToTake = __dirname+"/Packshots/"+ date.toString() +"/take"+files.length;
             }
 	    for (var i = 0; i < this.listPorts.length; i++) {
-            //var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
+            //var path = __dirname+"/Packshots/"+ date.toString() +"/picture"+i+".jpg";
             var picName = "/picture"+i+".jpg"
 	        var promesse = new Promise((resolve, reject) => {
 							//FOR WINDOWS : we need to take and then move the image the --filename is not working well.
@@ -138,9 +138,9 @@ export class Cameras {
 							else{
 								//FOR MAC/LINUX
 								exec("/usr/local/bin/gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ pathToTake+picName , (error, stdout, stderr) => {
-									 if(stderr!=""){ reject(stderr); }
-									 else if(error!=null){ reject(error); }
-									 else{ resolve(); }
+									 if(stderr!=""){ console.log(stderr); reject(stderr); }
+									 else if(error!=null){ console.log(error); reject(error); }
+									 else{ console.log(stdout); resolve(); }
 								});
 							}
             });
