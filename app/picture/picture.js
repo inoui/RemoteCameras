@@ -2,6 +2,7 @@ var fs = require('fs');
 var exec = require('child_process').exec;
 var $ = require("jquery");
 var mv = require('mv');
+var __dirname = process.env.HOME+"/Desktop";
 
 
 export class Picture {
@@ -78,18 +79,16 @@ export class Picture {
         var promesse = new Promise((resolve, reject) => {
             if(/^win/.test(process.platform)){
             //windows
-            exec("gphoto2.bat gphoto2 --set-config capturetarget=1  --capture-image-and-download  -F 1000", {cwd: "C:/Users/user/Desktop/RemoteCameras/gphoto/win32"}, (error, stdout, stderr) => {
-              var name = /IMG_+[0-9]+\.JPG/.exec(stdout);
-              console.log(this.path);
-              var pathnewimg =__dirname+'/gphoto/win32/'+name;
-              var re2 = new RegExp("\\\\","g");
-              pathnewimg=pathnewimg.replace(re2,/\//)
-              console.log(pathnewimg);
-                mv(pathnewimg,this.path, (err)=>  {
-                    console.log(err);
-                    resolve();
-                });
-            });
+            // exec("gphoto2.bat gphoto2 --set-config capturetarget=1  --capture-image-and-download  -F 1000", {cwd: "C:/Users/user/Desktop/RemoteCameras/gphoto/win32"}, (error, stdout, stderr) => {
+            //   var name = /IMG_+[0-9]+\.JPG/.exec(stdout);
+            //   console.log(this.path);
+            //   var oldname = __dirname+'/RemoteCameras/gphoto/win32/'+name;
+            //   oldname = oldname.replace(/\\/g,'/')
+            //     mv(oldname,this.path, (err)=>  {
+            //         console.log(err);
+            //         resolve();
+            //     });
+            // });
            }
           else{
             //MAC

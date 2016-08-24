@@ -107,14 +107,6 @@ export class Cameras {
 	takePictures(callback) {
                 var date = moment().format("YYYYMMDD");
         var listPromesses = [];
-        fs.readdir(__dirname+"/Packshots/"+ date.toString(), (err, files)=> {
-            var pathToTake;
-            if(files==undefined){
-                pathToTake = __dirname+"/Packshots/"+ date.toString() +"/take0";
-            }
-            else{
-               pathToTake = __dirname+"/Packshots/"+ date.toString() +"/take"+files.length;
-            }
 	    for (var i = 0; i < this.listPorts.length; i++) {
             var path = __dirname+"/Packshots/"+ date.toString();
             var picName = "/picture"+i+".jpg"
@@ -127,7 +119,11 @@ export class Cameras {
 									console.log(stderr)
 									console.log(stdout);
 									console.log(__dirname+'/gphoto/win32/'+name);
-    									mv(__dirname+'/gphoto/win32/'+name,pathToTake+picName, {mkdirp: true},(err)=>  {
+									var oldname = __dirname+'/RemoteCameras/gphoto/win32/'+name;
+									oldname = oldname.replace(/\\/g,'/')
+									var moveimgto = path+picName;
+									moveimgto = moveimgto.replace(/\\/g,'/')
+    									mv(oldname,moveimgto, {mkdirp: true},(err)=>  {
     											console.log(err);
     											if(stderr!=""){ reject(stderr); }
     											else if(error!=null){ reject(error); }
@@ -151,7 +147,6 @@ export class Cameras {
         })
         .then(function(content) {
             callback(path);
-        });
         });
 	}
 }

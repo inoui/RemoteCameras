@@ -103,13 +103,13 @@ export class listPicture {
     var file = this.pictures[0].src.replace(/\/[a-z0-9._-]+\.jpg/, "");
     if(/^win/.test(process.platform)){
     //windows
-    console.log(file.replace(/\//g,'\\\\'))
-      exec("explorer "+file.replace(/\//g,'\\\\'), function(error, stdout, stderr) {
-        console.log(error);
-        console.log(stdout);
-        console.log(stderr);
-      });
-     }
+    // console.log(file.replace(/\//g,'\\\\'))
+    //   exec("explorer "+file.replace(/\\/g,'/'), function(error, stdout, stderr) {
+    //     console.log(error);
+    //     console.log(stdout);
+    //     console.log(stderr);
+    //   });
+      }
      else {
        gui.Shell.showItemInFolder(file);
 
