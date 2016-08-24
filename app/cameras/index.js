@@ -1,6 +1,8 @@
 var exec = require('child_process').exec;
 var moment = require("moment");
 var $ = require("jquery");
+var mv = require('mv');
+//var mkdirp = require('mkdirp');
 var __dirname = process.env.PWD;
 
 export class Cameras {
@@ -69,20 +71,28 @@ export class Cameras {
     }
 
     set isTakingAPhoto(newValue) {
-        this._isTakingAPhoto = newValue; 
+        this._isTakingAPhoto = newValue;
     }
 
     getListPorts(callback){
     	var list=[];
-    	exec("gphoto2 --auto-detect", (error, stdout, stderr) =>{
-        //exec("set CAMLIBS=./camlibs", {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, function(error, stdout, stderr){});
-        //exec("set IOLIBS=./iolibs", {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, function(error, stdout, stderr){});
-        //exec("gphoto2.exe gphoto2 --auto-detect", {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, (error, stdout, stderr) =>{
+			//FOR WINDOWS
+			if(/^win/.test(process.platform)){
+        exec("gphoto2.bat gphoto2 --auto-detect", {cwd: "C:/Users/user/Desktop/RemoteCameras/gphoto/win32"}, (error, stdout, stderr) =>{
 	        console.log(stdout);
-
-            this.searchUsbPort(stdout,list);
+          this.searchUsbPort(stdout,list);
+					console.log("list des ports"+ list)
 	        callback(list);
-    	});
+    		});
+		  }
+			else{
+				//FOR MAC/LINUX
+				exec("gphoto2 --auto-detect", (error, stdout, stderr) =>{
+					console.log(stdout);
+					this.searchUsbPort(stdout,list);
+					callback(list);
+				});
+			}
     }
     searchUsbPort(stdout,list){
         var usbport = new RegExp(/usb\:+.*/);
@@ -98,12 +108,34 @@ export class Cameras {
 	    for (var i = 0; i < this.listPorts.length; i++) {
             var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
 	        var promesse = new Promise((resolve, reject) => {
-                exec("gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
-    	        //exec("gphoto2.exe gphoto2 --set-config capturetarget=1 --port usb:bus-0,\\.\libusb0-0001--0x04a9-0x32b4 --capture-image-and-download  -F 1000 --filename "+ path, {cwd: "C:/Users/user/Desktop/RemoteCameras-master/gphoto/win32"}, (error, stdout, stderr) => {
-                   if(stderr!=""){ reject(stderr); }
-    	           else if(error!=null){ reject(error); }
-    	           else{ resolve(); }
-                });
+							//FOR WINDOWS : we need to take and then move the image the --filename is not working well.
+							if(/^win/.test(process.platform)){
+								exec("gphoto2.bat gphoto2 --set-config capturetarget=1  --capture-image-and-download  -F 1000", {cwd: "C:/Users/user/Desktop/RemoteCameras/gphoto/win32"}, (error, stdout, stderr) => {
+									var name = /IMG_+[0-9]+\.JPG/.exec(stdout);
+									var pathtodate = __dirname+"/pictures/"+ date.toString() +"/";
+									console.log(error);
+									console.log(stderr)
+									console.log(stdout);
+									console.log(path);
+									console.log(__dirname+'/gphoto/win32/'+name);
+											//mkdirp(pathtodate, (err)=> {
+											mv(__dirname+'/gphoto/win32/'+name,path, {mkdirp: true},(err)=>  {
+													console.log(err);
+													if(stderr!=""){ reject(stderr); }
+													else if(error!=null){ reject(error); }
+													else{ resolve(); }
+											});
+										//});
+		            });
+							 }
+							else{
+								//FOR MAC/LINUX
+								exec("gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
+									 if(stderr!=""){ reject(stderr); }
+									 else if(error!=null){ reject(error); }
+									 else{ resolve(); }
+								});
+							}
             });
             listPromesses.push(promesse)
 	    };

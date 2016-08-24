@@ -2,6 +2,7 @@ var $ = require("jquery");
 var _ = require("underscore");
 var gui = require('nw.gui');
 var fs = require('fs');
+var exec = require('child_process').exec;
 
 
 
@@ -60,8 +61,6 @@ export class listPicture {
     current_pic.takeNewOne(()=> {
       $('.panel-body #tmpPleaseWait').remove();
       $('.panel-body').children().show();
-      console.log($elt.parent().find('img').attr("src"))
-      console.log("file://" + current_pic.src)
       $elt.parent().find('img').attr("src","")
       $elt.parent().find('img').attr("src","file://" + current_pic.src);
     });
@@ -85,21 +84,19 @@ export class listPicture {
 
   }
   openFolder(evt){
-    gui.Shell.showItemInFolder(this.pictures[0].src.replace(/\/[a-z0-9._-]+\.jpg/, ""));
+    var file = this.pictures[0].src.replace(/\/[a-z0-9._-]+\.jpg/, "");
+    if(/^win/.test(process.platform)){
+    //windows
+    console.log(file.replace(/\//g,'\\\\'))
+      exec("explorer "+file.replace(/\//g,'\\\\'), function(error, stdout, stderr) {
+        console.log(error);
+        console.log(stdout);
+        console.log(stderr);
+      });
+     }
+     else {
+       gui.Shell.showItemInFolder(file);
+
+     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
