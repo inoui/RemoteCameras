@@ -2,7 +2,7 @@ var exec = require('child_process').exec;
 var moment = require("moment");
 var $ = require("jquery");
 var mv = require('mv');
-//var mkdirp = require('mkdirp');
+var fs = require('fs');
 var __dirname = process.env.PWD;
 
 export class Cameras {
@@ -21,7 +21,10 @@ export class Cameras {
                     chrome.runtime.reload();
                 });
             }
+
         });
+        //alert(process.cwd())
+        //alert(process.env.PWD)
 		this.listPorts = [];
         this._isTakingAPhoto = false;
     }
@@ -87,7 +90,7 @@ export class Cameras {
 		  }
 			else{
 				//FOR MAC/LINUX
-				exec("gphoto2 --auto-detect", (error, stdout, stderr) =>{
+				exec("/usr/local/bin/gphoto2 --auto-detect", (error, stdout, stderr) =>{
 					console.log(stdout);
 					this.searchUsbPort(stdout,list);
 					callback(list);
@@ -103,34 +106,39 @@ export class Cameras {
         }
     }
 	takePictures(callback) {
-		var date = moment().unix();
+                var date = moment().format("YYYYMMDD");
         var listPromesses = [];
+        fs.readdir(__dirname+"/pictures/"+ date.toString(), (err, files)=> {
+            var pathToTake;
+            if(files==undefined){
+                pathToTake = __dirname+"/pictures/"+ date.toString() +"/take0";
+            }
+            else{
+               pathToTake = __dirname+"/pictures/"+ date.toString() +"/take"+files.length;
+            }
 	    for (var i = 0; i < this.listPorts.length; i++) {
-            var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
+            //var path = __dirname+"/pictures/"+ date.toString() +"/picture"+i+".jpg";
+            var picName = "/picture"+i+".jpg"
 	        var promesse = new Promise((resolve, reject) => {
 							//FOR WINDOWS : we need to take and then move the image the --filename is not working well.
 							if(/^win/.test(process.platform)){
 								exec("gphoto2.bat gphoto2 --set-config capturetarget=1  --capture-image-and-download  -F 1000", {cwd: "C:/Users/user/Desktop/RemoteCameras/gphoto/win32"}, (error, stdout, stderr) => {
 									var name = /IMG_+[0-9]+\.JPG/.exec(stdout);
-									var pathtodate = __dirname+"/pictures/"+ date.toString() +"/";
 									console.log(error);
 									console.log(stderr)
 									console.log(stdout);
-									console.log(path);
 									console.log(__dirname+'/gphoto/win32/'+name);
-											//mkdirp(pathtodate, (err)=> {
-											mv(__dirname+'/gphoto/win32/'+name,path, {mkdirp: true},(err)=>  {
-													console.log(err);
-													if(stderr!=""){ reject(stderr); }
-													else if(error!=null){ reject(error); }
-													else{ resolve(); }
-											});
-										//});
+    									mv(__dirname+'/gphoto/win32/'+name,pathToTake+picName, {mkdirp: true},(err)=>  {
+    											console.log(err);
+    											if(stderr!=""){ reject(stderr); }
+    											else if(error!=null){ reject(error); }
+    											else{ resolve(); }
+    									});
 		            });
 							 }
 							else{
 								//FOR MAC/LINUX
-								exec("gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path , (error, stdout, stderr) => {
+								exec("/usr/local/bin/gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ pathToTake+picName , (error, stdout, stderr) => {
 									 if(stderr!=""){ reject(stderr); }
 									 else if(error!=null){ reject(error); }
 									 else{ resolve(); }
@@ -143,7 +151,8 @@ export class Cameras {
             console.error('Erreur ' + err);
         })
         .then(function(content) {
-            callback(__dirname+"/pictures/"+ date.toString());
+            callback(pathToTake);
+        });
         });
 	}
 }

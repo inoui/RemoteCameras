@@ -93,7 +93,7 @@ export class Picture {
            }
           else{
             //MAC
-              exec("gphoto2 --port "+ this.usb +" --capture-image-and-download --filename "+ this.path + " --force-overwrite", (error, stdout, stderr) => {
+              exec("/usr/local/bin/gphoto2 --port "+ this.usb +" --capture-image-and-download --filename "+ this.path + " --force-overwrite", (error, stdout, stderr) => {
                  if(stderr!=""){ reject(stderr); }
                  else if(error!=null){ reject(error); }
                  else{ resolve(); }
