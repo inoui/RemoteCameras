@@ -115,15 +115,20 @@
                                   </div>
 
                                   <div class="panel-body text-center" data-id="<%= img.picId %>">
-                                      <h4>
+                                      <!-- <h4>
                                           <a href="#" class="pro-title" data-action="initRename">
                                               <%= img.name %>
                                           </a>
-                                      </h4>
+                                      </h4>-->
                                   </div>
                               </section>
                           </div>
                         <% }); %>
+                    </div>
+                    <div class="renameAll"> 
+                      <input type="text" name="images-name" placeholder="Nouveau nom" id="newnameAll"><br><br> 
+                      <input type="button" value="Valider" class="btn btn-default rename" data-action="renameAll"> 
+                      <br><br>
                     </div>
                     <button type="button" class="btn btn-primary" data-action="openFolder">
                         <i class="glyphicon glyphicon-folder-open"></i>

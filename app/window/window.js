@@ -16,8 +16,8 @@ export class Window {
 
     	//QUICK TEST WITHOUT CAMERA : DISPLAY PICTURES
 		// var pics = new listPicture();
-		// var date = "/Users/Maelle/Desktop/RemoteCameras/pictures/1470755595";
-		// var listport = ["020,005 ","020,005"];
+		// var date = "/Users/Maelle/Desktop/Packshots/20160824";
+		// var listport = ["020,005","020,006"];
 		// pics.init(date,listport);
 		// pics.displayPicture();
     }

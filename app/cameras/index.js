@@ -116,7 +116,7 @@ export class Cameras {
                pathToTake = __dirname+"/Packshots/"+ date.toString() +"/take"+files.length;
             }
 	    for (var i = 0; i < this.listPorts.length; i++) {
-            //var path = __dirname+"/Packshots/"+ date.toString() +"/picture"+i+".jpg";
+            var path = __dirname+"/Packshots/"+ date.toString();
             var picName = "/picture"+i+".jpg"
 	        var promesse = new Promise((resolve, reject) => {
 							//FOR WINDOWS : we need to take and then move the image the --filename is not working well.
@@ -137,7 +137,7 @@ export class Cameras {
 							 }
 							else{
 								//FOR MAC/LINUX
-								exec("/usr/local/bin/gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ pathToTake+picName , (error, stdout, stderr) => {
+								exec("/usr/local/bin/gphoto2 --port "+this.listPorts[i]+" --capture-image-and-download  -F 1000 --filename "+ path+picName , (error, stdout, stderr) => {
 									 if(stderr!=""){ console.log(stderr); reject(stderr); }
 									 else if(error!=null){ console.log(error); reject(error); }
 									 else{ console.log(stdout); resolve(); }
@@ -150,7 +150,7 @@ export class Cameras {
             console.error('Erreur ' + err);
         })
         .then(function(content) {
-            callback(pathToTake);
+            callback(path);
         });
         });
 	}

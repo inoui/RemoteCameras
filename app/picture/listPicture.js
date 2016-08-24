@@ -73,6 +73,22 @@ export class listPicture {
     $elt.parent().html('<br><input type="text" name="images-name" placeholder="Nouveau nom" id="newname'+ id+ '"><br><br> <input type="button" value="Valider" class="btn btn-default rename" data-action="rename"> <br><br>');
   }
 
+
+  renameAll(evt){
+    evt.stopPropagation()
+    var $elt = $(evt.currentTarget)
+    var id = $elt.parent().parent().data('id');
+    var name = $("#newnameAll").val();
+    for (var i = 0; i < this.pictures.length; i++) {
+      if(i==0){
+        this.pictures[i].setName(`${name}`,()=>{});
+      }
+      else{
+        this.pictures[i].setName(`${name}`+"-"+i,()=>{});
+      }
+    };
+    $elt.parent().html('<input type="text" name="images-name" placeholder="Nouveau nom" id="newnameAll"><br><br> <input type="button" value="Valider" class="btn btn-default rename" data-action="renameAll"> <br><br>');
+  }
   rename(evt){
     evt.stopPropagation()
     var $elt = $(evt.currentTarget)
