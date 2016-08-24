@@ -3,7 +3,8 @@ var moment = require("moment");
 var $ = require("jquery");
 var mv = require('mv');
 var fs = require('fs');
-var __dirname = process.env.PWD;
+//var __dirname = process.env.PWD;
+var __dirname = process.env.HOME+"/Desktop/Packshots";
 
 export class Cameras {
 	listPorts;
@@ -23,8 +24,6 @@ export class Cameras {
             }
 
         });
-        //alert(process.cwd())
-        //alert(process.env.PWD)
 		this.listPorts = [];
         this._isTakingAPhoto = false;
     }

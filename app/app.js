@@ -4,7 +4,7 @@
 // -----------------------------------------------------
 var $ = require("jquery");
 var _ = require("underscore");
-var __dirname = process.env.PWD;
+
 // Browser modules are imported through new ES6 syntax.
 import { Preferences } from './preferences/index';
 import { Controller } from './controller/controller';
